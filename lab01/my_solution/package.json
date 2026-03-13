@@ -1,0 +1,15 @@
+{
+  "name": "my_solution",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "film.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.20"
+  }
+}
