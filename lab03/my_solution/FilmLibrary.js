@@ -109,7 +109,7 @@ export default function FilmLibrary() {
 
     this.getUnseen = async () => {
         return new Promise((resolve, reject) => {
-            const sql = "SELECT * FROM films WHERE watchDate = NULL";
+            const sql = "SELECT * FROM films WHERE watchDate IS NULL";
 
             db.all(sql, (err, rows) => {
                 if (err) {
