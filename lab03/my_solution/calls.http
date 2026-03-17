@@ -15,3 +15,34 @@ GET http://localhost:3000/films/lastmonth
 ###
 
 GET http://localhost:3000/films/unseen
+
+###
+
+GET http://localhost:3000/films/1
+
+###
+
+GET http://localhost:3000/films/2
+
+###
+
+POST http://localhost:3000/films
+Content-Type: application/json
+
+{
+  "title": "Inception",
+  "watchDate": "2024-03-10",
+  "isFavorite": 1,
+  "rating": 5,
+  "user_id": 1
+}
+
+###
+
+PUT http://localhost:3000/films/2
+Content-Type: application/json
+
+{
+  "rating": 3,
+  "user_id": 2
+}

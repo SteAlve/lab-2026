@@ -1,6 +1,7 @@
 import sqlite from 'sqlite3'
 import dayjs from 'dayjs'
 import Film from './Film.js'
+import e from 'express';
 
 export default function FilmLibrary() {
 
@@ -78,6 +79,30 @@ export default function FilmLibrary() {
                         )
                     );
                     resolve(films);
+                }
+            });
+        });
+    };
+
+    this.getFilm = async (id) => {
+        return new Promise((resolve, reject) => {
+            const sql = "SELECT * FROM films WHERE id = ?";
+
+            db.get(sql, [id], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else if (!row){
+                    resolve(null);
+                }else{
+                    const film =new Film(
+                        row.id,
+                        row.title,
+                        row.watchDate ? dayjs(row.watchDate) : null,
+                        row.isFavorite,
+                        row.rating,
+                        row.user_id
+                    );
+                    resolve(film);
                 }
             });
         });
@@ -203,6 +228,38 @@ export default function FilmLibrary() {
                 }
             );
         });
+    };
+
+    this.updateFilm = async (film) => {
+        return new Promise(async (resolve, reject) => {
+            const sql = `
+                UPDATE films
+                SET title = ?, isFavorite = ?, watchDate = ?, rating = ?, userId = ?
+                WHERE id = ?`;
+            const existingFilm = await this.getFilm(film.id);
+
+            if (!existingFilm) {
+                throw new Error("Film not found");
+            }
+            db.run(
+                sql,
+                [
+                    film.title ?? existingFilm.title,
+                    film.favorite !== undefined ? (film.favorite ? 1 : 0) : existingFilm.isFavorite,
+                    film.watch_date ? film.watch_date.format("YYYY-MM-DD") : existingFilm.watchDate,
+                    film.rating ?? existingFilm.rating,
+                    film.user_id ?? existingFilm.user_id,
+                    film.id
+                ],
+                function (err) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(this.changes);
+                    }
+                }
+            );
+        }); 
     };
 
     this.deleteFilm = async (id) => {
