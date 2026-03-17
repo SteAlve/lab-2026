@@ -1,7 +1,6 @@
 import sqlite from 'sqlite3'
 import dayjs from 'dayjs'
 import Film from './Film.js'
-import e from 'express';
 
 export default function FilmLibrary() {
 
@@ -27,7 +26,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -51,7 +50,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -75,7 +74,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -94,13 +93,13 @@ export default function FilmLibrary() {
                 } else if (!row){
                     resolve(null);
                 }else{
-                    const film =new Film(
+                    const film = new Film(
                         row.id,
                         row.title,
                         row.watchDate ? dayjs(row.watchDate) : null,
                         row.isFavorite,
                         row.rating,
-                        row.user_id
+                        row.userId
                     );
                     resolve(film);
                 }
@@ -123,7 +122,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -147,7 +146,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -171,7 +170,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -194,7 +193,7 @@ export default function FilmLibrary() {
                             row.watchDate ? dayjs(row.watchDate) : null,
                             row.isFavorite,
                             row.rating,
-                            row.user_id
+                            row.userId
                         )
                     );
                     resolve(films);
@@ -214,10 +213,10 @@ export default function FilmLibrary() {
                 sql,
                 [
                     film.title,
-                    film.favorite ? 1 : 0,
-                    film.watch_date ? film.watch_date.format("YYYY-MM-DD") : null,
+                    film.isFavorite ? 1 : 0,
+                    film.watchDate ? film.watchDate.format("YYYY-MM-DD") : null,
                     film.rating,
-                    film.user_id
+                    film.userId
                 ],
                 function (err) {
                     if (err) {
@@ -253,19 +252,19 @@ export default function FilmLibrary() {
 
             const isFavorite = Object.hasOwn(updates, "isFavorite")
                 ? (updates.isFavorite ? 1 : 0)
-                : existingFilm.favorite;
+                : existingFilm.isFavorite;
 
             const watchDate = Object.hasOwn(updates, "watchDate")
                 ? (updates.watchDate ? dayjs(updates.watchDate).format("YYYY-MM-DD") : null)
-                : (existingFilm.watch_date ? existingFilm.watch_date.format("YYYY-MM-DD") : null);
+                : (existingFilm.watchDate ? existingFilm.watchDate.format("YYYY-MM-DD") : null);
 
             const rating = Object.hasOwn(updates, "rating")
                 ? updates.rating
                 : existingFilm.rating;
 
-            const userId = Object.hasOwn(updates, "user_id")
-                ? updates.user_id
-                : existingFilm.user_id;
+            const userId = Object.hasOwn(updates, "userId")
+                ? updates.userId
+                : existingFilm.userId;
 
             db.run(sql, [title, isFavorite, watchDate, rating, userId, id], function (err) {
                 if (err) reject(err);

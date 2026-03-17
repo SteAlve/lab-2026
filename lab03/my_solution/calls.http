@@ -44,7 +44,8 @@ Content-Type: application/json
 
 {
   "rating": 4,
-  "user_id": 1
+  "user_id": 1,
+  "watchDate": "2025-02-12"
 }
 
 ###
@@ -53,7 +54,7 @@ PUT http://localhost:3000/films/3/rating
 Content-Type: application/json
 
 {
-  "rating": 4
+  "rating": 3
 }
 
 ###
@@ -62,9 +63,9 @@ PUT http://localhost:3000/films/3/favorite
 Content-Type: application/json
 
 {
-  "isFavorite": 0
+  "isFavorite": 1
 }
 
 ###
 
-DELETE http://localhost:3000/films/7
+DELETE http://localhost:3000/films/8
