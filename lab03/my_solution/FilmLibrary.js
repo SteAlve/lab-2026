@@ -274,6 +274,55 @@ export default function FilmLibrary() {
         });
     };
 
+    this.updateRating = async (id, updates) => {
+        const existingFilm = await this.getFilm(id);
+
+        if (!existingFilm) {
+            throw new Error("Film not found");
+        }
+
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE films
+                SET rating = ?
+                WHERE id = ?`;
+
+            const rating = Object.hasOwn(updates, "rating")
+                ? updates.rating
+                : existingFilm.rating;
+
+            db.run(sql, [rating, id], function (err) {
+                if (err) reject(err);
+                else resolve(this.changes);
+            });
+        });
+    };
+
+    this.updateFavorite = async (id, updates) => {
+        const existingFilm = await this.getFilm(id);
+
+        if (!existingFilm) {
+            throw new Error("Film not found");
+        }
+
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE films
+                SET isFavorite = ?
+                WHERE id = ?`;
+
+            const isFavorite = Object.hasOwn(updates, "isFavorite")
+                ? (updates.isFavorite ? 1 : 0)
+                : existingFilm.favorite;
+
+            db.run(sql, [isFavorite, id], function (err) {
+                if (err) reject(err);
+                else resolve(this.changes);
+            });
+        });
+    };
+
+
     this.deleteFilm = async (id) => {
         return new Promise((resolve, reject) => {
             const sql = "DELETE FROM films WHERE id = ?";

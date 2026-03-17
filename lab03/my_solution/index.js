@@ -66,4 +66,31 @@ app.put("/films/:id", express.json(), async (req, res) => {
     }
 });
 
+app.put("/films/:id/rating", express.json(), async (req, res) =>{
+    try {
+        await fl.updateRating(req.params.id, req.body);
+        res.end();
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+app.put("/films/:id/favorite", express.json(), async (req, res) => {
+    try {
+        await fl.updateFavorite(req.params.id, req.body);
+        res.end();
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+app.delete("/films/:id", async (req, res) => {
+    try {
+        await fl.deleteFilm(req.params.id);
+        res.end();
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 app.listen(3000, () => console.log('Server ready'));

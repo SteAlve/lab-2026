@@ -46,3 +46,25 @@ Content-Type: application/json
   "rating": 4,
   "user_id": 1
 }
+
+###
+
+PUT http://localhost:3000/films/2/rating
+Content-Type: application/json
+
+{
+  "rating": 2
+}
+
+###
+
+PUT http://localhost:3000/films/2/favorite
+Content-Type: application/json
+
+{
+  "isFavorite": 1
+}
+
+###
+
+DELETE http://localhost:3000/films/7
