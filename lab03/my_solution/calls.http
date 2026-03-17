@@ -49,20 +49,20 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/films/2/rating
+PUT http://localhost:3000/films/3/rating
 Content-Type: application/json
 
 {
-  "rating": 2
+  "rating": 4
 }
 
 ###
 
-PUT http://localhost:3000/films/2/favorite
+PUT http://localhost:3000/films/3/favorite
 Content-Type: application/json
 
 {
-  "isFavorite": 1
+  "isFavorite": 0
 }
 
 ###

@@ -274,7 +274,7 @@ export default function FilmLibrary() {
         });
     };
 
-    this.updateRating = async (id, updates) => {
+    this.updateRating = async (id, rating) => {
         const existingFilm = await this.getFilm(id);
 
         if (!existingFilm) {
@@ -282,23 +282,24 @@ export default function FilmLibrary() {
         }
 
         return new Promise((resolve, reject) => {
-            const sql = `
-                UPDATE films
-                SET rating = ?
-                WHERE id = ?`;
-
-            const rating = Object.hasOwn(updates, "rating")
-                ? updates.rating
-                : existingFilm.rating;
-
+            const sql = 'UPDATE films SET rating = ? WHERE id = ?';
             db.run(sql, [rating, id], function (err) {
-                if (err) reject(err);
-                else resolve(this.changes);
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                if (this.changes === 0) {
+                    reject({ error: 'Film not found' });
+                    return;
+                }
+
+                resolve(this.changes);
             });
         });
     };
 
-    this.updateFavorite = async (id, updates) => {
+    this.updateFavorite = async (id, isFavorite) => {
         const existingFilm = await this.getFilm(id);
 
         if (!existingFilm) {
@@ -306,24 +307,26 @@ export default function FilmLibrary() {
         }
 
         return new Promise((resolve, reject) => {
-            const sql = `
-                UPDATE films
-                SET isFavorite = ?
-                WHERE id = ?`;
-
-            const isFavorite = Object.hasOwn(updates, "isFavorite")
-                ? (updates.isFavorite ? 1 : 0)
-                : existingFilm.favorite;
+            const sql = 'UPDATE films SET isFavorite = ? WHERE id = ?';
 
             db.run(sql, [isFavorite, id], function (err) {
-                if (err) reject(err);
-                else resolve(this.changes);
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(this.changes);
             });
         });
     };
 
-
     this.deleteFilm = async (id) => {
+        const existingFilm = await this.getFilm(id);
+
+        if (!existingFilm) {
+            throw new Error("Film not found");
+        }
+        
         return new Promise((resolve, reject) => {
             const sql = "DELETE FROM films WHERE id = ?";
 
