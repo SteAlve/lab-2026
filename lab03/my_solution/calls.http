@@ -43,6 +43,6 @@ PUT http://localhost:3000/films/2
 Content-Type: application/json
 
 {
-  "rating": 3,
-  "user_id": 2
+  "rating": 4,
+  "user_id": 1
 }

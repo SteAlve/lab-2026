@@ -230,36 +230,48 @@ export default function FilmLibrary() {
         });
     };
 
-    this.updateFilm = async (film) => {
-        return new Promise(async (resolve, reject) => {
+    this.updateFilm = async (id, updates) => {
+        const existingFilm = await this.getFilm(id);
+
+        if (!existingFilm) {
+            throw new Error("Film not found");
+        }
+
+        return new Promise((resolve, reject) => {
             const sql = `
                 UPDATE films
-                SET title = ?, isFavorite = ?, watchDate = ?, rating = ?, userId = ?
+                SET title = ?,
+                    isFavorite = ?,
+                    watchDate = ?,
+                    rating = ?,
+                    userId = ?
                 WHERE id = ?`;
-            const existingFilm = await this.getFilm(film.id);
 
-            if (!existingFilm) {
-                throw new Error("Film not found");
-            }
-            db.run(
-                sql,
-                [
-                    film.title ?? existingFilm.title,
-                    film.favorite !== undefined ? (film.favorite ? 1 : 0) : existingFilm.isFavorite,
-                    film.watch_date ? film.watch_date.format("YYYY-MM-DD") : existingFilm.watchDate,
-                    film.rating ?? existingFilm.rating,
-                    film.user_id ?? existingFilm.user_id,
-                    film.id
-                ],
-                function (err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(this.changes);
-                    }
-                }
-            );
-        }); 
+            const title = Object.hasOwn(updates, "title")
+                ? updates.title
+                : existingFilm.title;
+
+            const isFavorite = Object.hasOwn(updates, "isFavorite")
+                ? (updates.isFavorite ? 1 : 0)
+                : existingFilm.favorite;
+
+            const watchDate = Object.hasOwn(updates, "watchDate")
+                ? (updates.watchDate ? dayjs(updates.watchDate).format("YYYY-MM-DD") : null)
+                : (existingFilm.watch_date ? existingFilm.watch_date.format("YYYY-MM-DD") : null);
+
+            const rating = Object.hasOwn(updates, "rating")
+                ? updates.rating
+                : existingFilm.rating;
+
+            const userId = Object.hasOwn(updates, "user_id")
+                ? updates.user_id
+                : existingFilm.user_id;
+
+            db.run(sql, [title, isFavorite, watchDate, rating, userId, id], function (err) {
+                if (err) reject(err);
+                else resolve(this.changes);
+            });
+        });
     };
 
     this.deleteFilm = async (id) => {

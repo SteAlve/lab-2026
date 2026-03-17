@@ -58,20 +58,12 @@ app.post("/films",express.json(), async (req, res) => {
 });
 
 app.put("/films/:id", express.json(), async (req, res) => {
-    try{
-        const film = new Film(
-            req.params.id,
-            req.body.title,
-            req.body.watchDate ? dayjs(req.body.watchDate) : null,
-            req.body.isFavorite,
-            req.body.rating,
-            req.body.user_id
-        );
-        await fl.updateFilm(film);
+    try {
+        await fl.updateFilm(req.params.id, req.body);
         res.end();
     } catch (err) {
         res.status(500).json(err);
-    } 
+    }
 });
 
 app.listen(3000, () => console.log('Server ready'));
