@@ -1,5 +1,4 @@
-import Offcanvas from "react-bootstrap/Offcanvas";
-import Nav from "react-bootstrap/Nav";
+import { Offcanvas, Nav } from "react-bootstrap";
 
 function MobileFilters({ show, onHide, selectedFilter, setSelectedFilter }) {
   const filters = ["All", "Favorite", "Best Rated", "Seen Last Month", "Unseen"];

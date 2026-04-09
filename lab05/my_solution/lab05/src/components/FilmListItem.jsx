@@ -1,4 +1,4 @@
-import Button from "react-bootstrap/Button";
+import { Button } from "react-bootstrap";
 import dayjs from "dayjs";
 import RatingStars from "./RatingStars";
 
