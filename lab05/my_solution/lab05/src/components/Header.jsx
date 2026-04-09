@@ -1,15 +1,14 @@
 import { Navbar, Container, Form, Button } from "react-bootstrap";
 
-function Header() {
+function Header({ onOpenFilters }) {
   return (
     <Navbar bg="primary" variant="dark" className="py-2">
       <Container fluid className="gap-2">
         <Button
           variant="link"
           className="text-white p-1 d-lg-none"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#filterOffcanvas"
           aria-label="Toggle filters"
+          onClick={onOpenFilters}
         >
           <i className="bi bi-list fs-4"></i>
         </Button>

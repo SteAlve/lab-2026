@@ -20,9 +20,7 @@ function SidebarFilters({ selectedFilter, setSelectedFilter }) {
                 setSelectedFilter(filter);
               }}
               className={`px-3 py-2 ${
-                isActive
-                  ? "rounded bg-primary text-white"
-                  : "text-dark"
+                isActive ? "rounded bg-primary text-white" : "text-dark"
               }`}
             >
               {filter}

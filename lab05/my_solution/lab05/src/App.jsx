@@ -4,6 +4,7 @@ import {Container, Row, Col} from "react-bootstrap";
 
 import Header from "./components/Header";
 import SidebarFilters from "./components/SidebarFilters";
+import MobileFilters from "./components/MobileFilters";
 import FilmList from "./components/FilmList";
 import filmsData from "./data/films";
 import AddFilmButton from "./components/AddFilmButton";
@@ -11,6 +12,7 @@ import AddFilmButton from "./components/AddFilmButton";
 function App() {
   const [films] = useState(filmsData);
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [showFilters, setShowFilters] = useState(false);
 
   const filterTitles = {
     All: "All films",
@@ -34,11 +36,13 @@ function App() {
 
           const watchDate = dayjs(film.watchDate);
           const today = dayjs();
-          const thirtyDaysAgo = dayjs().subtract(30, "day");
+          const thirtyDaysAgo = today.subtract(30, "day");
 
-          return watchDate.isValid() &&
-            watchDate.isBefore(today.add(1, "day")) &&
-            watchDate.isAfter(thirtyDaysAgo);
+          return (
+            watchDate.isValid() &&
+            (watchDate.isAfter(thirtyDaysAgo) || watchDate.isSame(thirtyDaysAgo, "day")) &&
+            (watchDate.isBefore(today) || watchDate.isSame(today, "day"))
+          );
         });
 
       case "Unseen":
@@ -54,7 +58,14 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header onOpenFilters={() => setShowFilters(true)} />
+
+      <MobileFilters
+        show={showFilters}
+        onHide={() => setShowFilters(false)}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
 
       <Container fluid>
         <Row>
